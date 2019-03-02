@@ -1,8 +1,8 @@
 # framework-esp8266-rtos-sdk-idf-platformio
-This is PLATFORM package for platformio.
+This is PLATFORM package for platformio .
 
-Package name is custom8266
-Framework name is esp8266-rtos-sdk-idf
+Package name is custom8266.
+Framework name is esp8266-rtos-sdk-idf.
 
 Package include
 - builder scrypt for framework https://github.com/espressif/ESP8266_RTOS_SDK.git master
