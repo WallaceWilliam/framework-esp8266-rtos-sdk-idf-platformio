@@ -12,7 +12,6 @@
     "wifi"
   ],
   "frameworks": [
-    "esp8266-rtos-sdk-idf",
     "esp8266-rtos-sdk"
   ],
   "name": "WeMos D1 R2 & mini",
