@@ -38,28 +38,6 @@
       "type": "framework",
       "optional": true,
       "version": "https://github.com/espressif/ESP8266_RTOS_SDK.git"
-    },
-    "tool-esptool": {
-      "type": "uploader",
-      "version": "<2"
-    },
-    "tool-esptoolpy": {
-      "type": "uploader",
-      "version": "~1.20600.0"
-    }, 
-    "tool-espotapy": {
-      "type": "uploader",
-      "optional": true,
-      "version": "~1.1.0"
-    },
-    "tool-mkspiffs": {
-      "type": "uploader",
-      "optional": true,
-      "version": "~1.200.0"
-    },
-    "sdk-esp8266": {
-      "optional": true,
-      "version": "~1.10502.0"
     }
   }
 }
