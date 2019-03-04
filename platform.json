@@ -27,6 +27,10 @@
     "esp8266-rtos-sdk-idf": {
       "package": "framework-esp8266-rtos-sdk-idf",
       "script": "builder/frameworks/esp8266-rtos-sdk-idf.py"
+    },
+    "esp8266-rtos-sdk": {
+      "package": "framework-esp8266-rtos-sdk",
+      "script": "builder/frameworks/esp8266-rtos-sdk-idf.py"
     }
   },
   "packages": {
@@ -35,6 +39,11 @@
       "version": ">5.0.0"
     },
     "framework-esp8266-rtos-sdk-idf": {
+      "type": "framework",
+      "optional": true,
+      "version": "https://github.com/espressif/ESP8266_RTOS_SDK.git"
+    },
+    "framework-esp8266-rtos-sdk": {
       "type": "framework",
       "optional": true,
       "version": "https://github.com/espressif/ESP8266_RTOS_SDK.git"
