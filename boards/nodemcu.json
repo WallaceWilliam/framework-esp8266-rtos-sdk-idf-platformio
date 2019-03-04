@@ -19,10 +19,7 @@
     "wifi"
   ],
   "frameworks": [
-    "arduino",
-    "simba",
-    "esp8266-rtos-sdk",
-    "esp8266-nonos-sdk"
+    "esp8266-rtos-sdk"
   ],
   "name": "NodeMCU 0.9 (ESP-12 Module)",
   "upload": {
