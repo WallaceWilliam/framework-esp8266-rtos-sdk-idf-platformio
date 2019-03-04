@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "file://c:/temp"
+    "url": "https://github.com/WallaceWilliam/framework-esp8266-rtos-sdk-idf-platformio.git"
   },
   "version": "1.0.0",
   "packageRepositories": [
