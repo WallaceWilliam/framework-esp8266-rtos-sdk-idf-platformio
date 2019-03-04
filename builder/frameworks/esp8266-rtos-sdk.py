@@ -31,9 +31,9 @@ from SCons.Script import DefaultEnvironment
 
 env = DefaultEnvironment()
 platform = env.PioPlatform()
-
-FRAMEWORK_DIR = platform.get_package_dir("framework-esp8266-rtos-sdk-idf")
-env.Replace(FRAMEWORK_DIR=FRAMEWORK_DIR,)
+FRAMEWORK_NAME = "framework-"+env.subst('$PIOFRAMEWORK')
+FRAMEWORK_DIR = platform.get_package_dir(FRAMEWORK_NAME)
+env.Replace(FRAMEWORK_DIR=FRAMEWORK_DIR)
 
 env.SConscript("_bare.py", exports="env")
 env.SConscript("_embedtxt_files.py", exports="env")
@@ -510,7 +510,7 @@ env.Prepend(
         "WITH_POSIX",
         "ESP_PLATFORM",
         ("IDF_VER", '\\"%s\\"' %
-         platform.get_package_version("framework-esp8266-rtos-sdk-idf")),
+         platform.get_package_version(FRAMEWORK_NAME)),
     ],
 
     CCFLAGS=[
