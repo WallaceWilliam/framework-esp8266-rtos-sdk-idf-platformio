@@ -274,8 +274,8 @@ upload_actions = []
 if upload_protocol == "esptool":
     env.Replace(
         UPLOADER="$OBJCOPY",
-        UPLOADEROTA=join(
-            platform.get_package_dir("tool-espotapy") or "", "espota.py"),
+#        UPLOADEROTA=join(
+#            platform.get_package_dir("tool-espotapy") or "", "espota.py"),
         UPLOADERFLAGS=[
             "--chip", "esp8266",
             "--port", '"$UPLOAD_PORT"',
@@ -298,7 +298,7 @@ if upload_protocol == "esptool":
     for image in env.get("FLASH_EXTRA_IMAGES", []):
         env.Append(UPLOADERFLAGS=[image[0], image[1]])
 
-    if "uploadfs" in COMMAND_LINE_TARGETS:
+    if "_uploadfs" in COMMAND_LINE_TARGETS:
         env.Replace(
             UPLOADERFLAGS=[
                 "--chip", "esp8266",
