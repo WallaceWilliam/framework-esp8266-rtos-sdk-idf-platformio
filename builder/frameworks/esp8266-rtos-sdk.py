@@ -27,7 +27,7 @@ from os.path import abspath, basename, isdir, isfile, join
 from shutil import copy
 import sys
 from SCons.Script import DefaultEnvironment
-
+import shlex
 
 env = DefaultEnvironment()
 platform = env.PioPlatform()
@@ -230,6 +230,7 @@ def parse_define(path):
         for line in fp.readlines():
             line = line.strip()
             if line.startswith("#define"):
+		line = line.replace('"','')
                 _, variable, line = line.split(" ", 2)
                 variable = variable.strip()
                 try:
@@ -415,6 +416,13 @@ def build_espidf_bootloader():
             join(FRAMEWORK_DIR, "components", "bootloader", "subproject", "main")
         )
     )
+
+def search_file(filename, search_path):
+    """ Given a search path, find file with requested name """
+    for path in search_path:
+        candidate = join(path, filename)
+        if isfile(candidate): return abspath(candidate)
+    return None
 
 ###################################################
 #
@@ -613,12 +621,19 @@ env.Replace(ASFLAGS=[])
 # Generate partition table
 #
 
-fwpartitions_dir = join(FRAMEWORK_DIR, "components", "partition_table")
-partitions_csv = env.BoardConfig().get("build.partitions", "partitions_singleapp.csv")
+search_path = [
+                join(FRAMEWORK_DIR, "components", "partition_table"),
+                join(env.subst("$PROJECTSRC_DIR")),
+              ]
+if('CONFIG_PARTITION_TABLE_CUSTOM_FILENAME' in env['SDKCONFIG']):
+    partitions_csv = env['SDKCONFIG']['CONFIG_PARTITION_TABLE_CUSTOM_FILENAME']
+else:
+    partitions_csv = env['SDKCONFIG']['CONFIG_PARTITION_TABLE_FILENAME']
+partitions_csv = env.BoardConfig().get("build.partitions", partitions_csv)
+full_partitions_csv=search_file(partitions_csv, search_path)
 env.Replace(
-    PARTITIONS_TABLE_CSV=abspath(
-        join(fwpartitions_dir, partitions_csv) if isfile(
-            join(fwpartitions_dir, partitions_csv)) else partitions_csv))
+    PARTITIONS_TABLE_CSV=full_partitions_csv if isfile(full_partitions_csv) else abspath(partitions_csv))
+
 
 partition_table = env.Command(
     join("$BUILD_DIR", "partitions.bin"),
