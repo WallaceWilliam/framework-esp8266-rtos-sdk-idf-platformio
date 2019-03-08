@@ -19,3 +19,9 @@ builder scrypt test only
 - flash over USB CP2102 (and similar)
 
 features such as secureboot, OTA, flash less than 4M - NOT TESTED!!
+
+## UPD 08.03.2019
+Added support CONFIG_PARTITION_TABLE_CUSTOM_FILENAME
+in sdkconfig.h
+#define CONFIG_PARTITION_TABLE_CUSTOM_FILENAME "partitions_custom.csv"
+in %PROJECTSRC_DIR put partitions_custom.csv
