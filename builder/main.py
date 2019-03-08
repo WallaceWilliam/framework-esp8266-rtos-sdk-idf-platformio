@@ -153,7 +153,8 @@ env.Replace(
     GDB="xtensa-lx106-elf-gdb",
 #    OBJCOPY=join(platform.get_package_dir("tool-esptoolpy") or "", "esptool.py"),
 #    OBJCOPY=join(platform.get_package_dir("framework-esp8266-rtos-sdk-master"), "components", "esptool_py", "esptool", "esptool.py"),
-    OBJCOPY=join("$FRAMEWORK_DIR", "components", "esptool_py", "esptool", "esptool.py"),
+    OBJCOPY="xtensa-lx106-elf-objcopy",
+    ESPTOOL=join("$FRAMEWORK_DIR", "components", "esptool_py", "esptool", "esptool.py"),
     RANLIB="xtensa-lx106-elf-ranlib",
     SIZETOOL="xtensa-lx106-elf-size",
 
@@ -170,7 +171,7 @@ env.Replace(
         "--chip", "esp8266",
         "--port", '"$UPLOAD_PORT"'
     ],
-    ERASECMD='"$PYTHONEXE" "$OBJCOPY" $ERASEFLAGS erase_flash',
+    ERASECMD='"$PYTHONEXE" "$ESPTOOL" $ERASEFLAGS erase_flash',
 
     MKSPIFFSTOOL="mkspiffs_${PIOPLATFORM}_${PIOFRAMEWORK}",
     PROGSUFFIX=".elf"
@@ -187,7 +188,7 @@ env.Append(
     BUILDERS=dict(
         ElfToBin=Builder(
             action=env.VerboseAction(" ".join([
-                '"$PYTHONEXE" "$OBJCOPY"',
+                '"$PYTHONEXE" "$ESPTOOL"',
                 "--chip", "esp8266",
                 "elf2image",
                 "--version", "3",
@@ -273,7 +274,7 @@ upload_actions = []
 
 if upload_protocol == "esptool":
     env.Replace(
-        UPLOADER="$OBJCOPY",
+        UPLOADER="$ESPTOOL",
 #        UPLOADEROTA=join(
 #            platform.get_package_dir("tool-espotapy") or "", "espota.py"),
         UPLOADERFLAGS=[

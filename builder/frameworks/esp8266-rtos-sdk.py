@@ -635,7 +635,6 @@ full_partitions_csv=search_file(partitions_csv, search_path)
 env.Replace(
     PARTITIONS_TABLE_CSV=full_partitions_csv if isfile(full_partitions_csv) else abspath(partitions_csv))
 
-
 partition_table = env.Command(
     join("$BUILD_DIR", "partitions.bin"),
     "$PARTITIONS_TABLE_CSV",
@@ -721,15 +720,6 @@ for d in build_dirs:
     if(d=="esp8266"):
         filt = libesp8266(env, 0)
         lib_build.append((d,filt+" -<test*>"))
-#    elif(d=="spi_flash"):
-#        filt = libspi_flash(env, 0)
-#        lib_build.append((d,filt+" -<test*>"))
-#    elif(d=="ssl"):
-#        filt = libssl()
-#        lib_build.append((d,filt))
-#    elif(d=="newlib"):
-#        filt = libnewlib()
-#        lib_build.append((d,filt))
     elif(isdir(component_dir)):
         kwargs={'SET':{'COMPONENT_PATH':component_dir}}
         lib_build.append((d, build_comp(env, component_dir, **kwargs)))
@@ -741,9 +731,5 @@ for d,filt in lib_build:
         env.BuildLibrary(build_dir, component_dir, src_filter=filt),
     )
     
-#envsafe = env.Clone()
-
-#print("CPPPATH", env['CPPPATH'])
 env.Append(LIBS=libs)
-#env.Replace(CCCOM="asdf")
 #print(env.Dump())

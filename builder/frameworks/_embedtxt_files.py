@@ -19,6 +19,8 @@ from SCons.Script import Builder
 
 from platformio.util import cd
 
+import click
+
 Import("env")
 
 
@@ -45,20 +47,20 @@ def extract_files(cppdefines):
             continue
 
         if not isinstance(define, tuple):
-            print("Warning! COMPONENT_EMBED_TXTFILES macro cannot be empty!")
+            print(click.style("Warning! COMPONENT_EMBED_TXTFILES macro cannot be empty!", fg="red"))
             return []
 
         with cd(env.subst("$PROJECT_DIR")):
             value = define[1]
             if not isinstance(value, str):
-                print("Warning! COMPONENT_EMBED_TXTFILES macro must contain "
-                      "a list of files separated by ':'")
+                print(click.style("Warning! COMPONENT_EMBED_TXTFILES macro must contain "
+                      "a list of files separated by ':'", fg="red"))
                 return []
 
             result = []
             for f in value.split(':'):
                 if not isfile(f):
-                    print("Warning! Could not find file %s" % f)
+                    print(click.style("Warning! Could not find file %s" % f, fg="red"))
                     continue
                 result.append(join("$PROJECT_DIR", f))
 
@@ -74,6 +76,7 @@ def remove_config_define(cppdefines):
 
 def embed_files(files):
     for f in files:
+        print(click.style("Embed file %s" % f, fg="green"))
         filename = basename(f) + ".txt.o"
         file_target = env.TxtToBin(join("$BUILD_DIR", filename), f)
         env.Depends("$PIOMAINPROG", file_target)
@@ -84,7 +87,7 @@ env.Append(
     BUILDERS=dict(
         TxtToBin=Builder(
             action=env.VerboseAction(" ".join([
-                "xtensa-esp32-elf-objcopy",
+                "$OBJCOPY",
                 "--input-target", "binary",
                 "--output-target", "elf32-xtensa-le",
                 "--binary-architecture", "xtensa",
