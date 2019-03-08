@@ -27,4 +27,4 @@ in sdkconfig.h
 
 #define CONFIG_PARTITION_TABLE_CUSTOM_FILENAME "partitions_custom.csv"
 
-in %PROJECTSRC_DIR put partitions_custom.csv
+in $PROJECTSRC_DIR put partitions_custom.csv

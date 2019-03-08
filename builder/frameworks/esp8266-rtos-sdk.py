@@ -28,6 +28,7 @@ from shutil import copy
 import sys
 from SCons.Script import DefaultEnvironment
 import shlex
+import click
 
 env = DefaultEnvironment()
 platform = env.PioPlatform()
@@ -691,22 +692,29 @@ build_dirs = [
     "libsodium", "mqtt",
     "aws_iot",  
     "esp_https_ota", "protocomm", "wifi_provisioning",
+    "esp_http_server",
 ]
 build_excl = [
     "bootloader", "esptool_py", "partition_table",
 ]
-k = build_dirs+build_excl
-new_lib=[]
-for p in listdir(join(FRAMEWORK_DIR, "components")):
-    if(isdir(join(FRAMEWORK_DIR, "components", p))):
-        if(p not in k):
-            new_lib.append(p)
-        else: k.remove(p)
-if(new_lib):
-    raise ValueError("New lib", new_lib)
-if(k):
-    print("Lib not found", k)
-#for d in listdir(join(FRAMEWORK_DIR, "components")):
+if isdir("c:\\users\\test"):
+	k = build_dirs+build_excl
+	new_lib=[]
+	for p in listdir(join(FRAMEWORK_DIR, "components")):
+	    if(isdir(join(FRAMEWORK_DIR, "components", p))):
+        	if(p not in k):
+	            new_lib.append(p)
+        	else: k.remove(p)
+	if(new_lib or k):
+	    print("%s %s\n%s %s" %(
+		click.style("New lib: ", fg="red", bold=True),
+		", ".join(new_lib),
+		click.style("Lib not found: ", fg="red", bold=True),
+		", ".join(k),
+                )
+	    )
+	    env.Exit(1)
+
 for d in build_dirs:
     build_dir = join("$BUILD_DIR", d)
     component_dir = join(FRAMEWORK_DIR, "components", d)
