@@ -431,8 +431,8 @@ def search_file(filename, search_path):
 #
 
 if not isfile(join(env.subst("$PROJECTSRC_DIR"), "sdkconfig.h")):
-    print("Warning! Cannot find \"sdkconfig.h\" file. "
-          "Default \"sdkconfig.h\" will be added to your project!")
+    print(click.style("Warning! Cannot find \"sdkconfig.h\" file. "
+          "Default \"sdkconfig.h\" will be added to your project!", fg="red"))
     copy(find_valid_config_file(), join(env.subst("$PROJECTSRC_DIR"), "sdkconfig.h"))
 else:
     is_new = False
@@ -531,11 +531,6 @@ env.Prepend(
 #        "-Wno-error=unused-function"
     ],
 )
-
-#if 'CONFIG_BOOTLOADER_CHECK_APP_SUM' in env['SDKCONFIG']:
-#    env.AppendUnique(CPPDEFINES=['CONFIG_ENABLE_BOOT_CHECK_SUM',],)
-#if 'CONFIG_BOOTLOADER_CHECK_APP_HASH' in env['SDKCONFIG']:
-#    env.AppendUnique(CPPDEFINES=['CONFIG_ENABLE_BOOT_CHECK_SHA256',],)
 
 env.Append(
     LINKFLAGS_PRE=[

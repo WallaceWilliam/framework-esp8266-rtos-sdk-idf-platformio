@@ -118,11 +118,9 @@ def fetch_spiffs_size(env):
     env["SPIFFS_PAGE"] = int("0x100", 16)
     env["SPIFFS_BLOCK"] = int("0x1000", 16)
 
-
 def __fetch_spiffs_size(target, source, env):
     fetch_spiffs_size(env)
     return (target, source)
-
 
 env = DefaultEnvironment()
 platform = env.PioPlatform()
@@ -138,6 +136,7 @@ class ProgressCounter(object):
         self.count += 1
 #        sys.stderr.write('Evaluated %s nodes\r' % self.count)
         print('Evaluated %s nodes\r' % self.count)
+
 Progress(ProgressCounter(), interval=100)
 
 #env.Decider('timestamp-newer')
@@ -281,9 +280,9 @@ if upload_protocol == "esptool":
             "--chip", "esp8266",
             "--port", '"$UPLOAD_PORT"',
             "--baud", "$UPLOAD_SPEED",
-            "--before", "default_reset",
-            "--after", "hard_reset",
-            "write_flash", "--compress",
+            "--before", env['SDKCONFIG'].get('CONFIG_ESPTOOLPY_BEFORE', "default_reset"),
+            "--after", env['SDKCONFIG'].get('CONFIG_ESPTOOLPY_AFTER', "hard_reset"),
+            "write_flash", "--compress" if 'CONFIG_ESPTOOLPY_COMPRESSED' in env['SDKCONFIG'] else "",
             "--flash_mode", "${__get_board_flash_mode(__env__)}",
             "--flash_freq", "${__get_board_f_flash(__env__)}",
             "--flash_size", "detect"
