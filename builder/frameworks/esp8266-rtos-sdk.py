@@ -677,6 +677,7 @@ def libnewlib():
 
 libs = []
 lib_build=[]
+
 build_dirs = [
     "esp8266", "util", "nvs_flash", "newlib", "ssl", "bootloader_support", "log",
     "lwip", "tcpip_adapter", "spi_flash", "heap", "freertos",
@@ -710,6 +711,7 @@ if isdir("c:\\users\\test"):
 	    env.Exit(1)
 
 for d in build_dirs:
+    if d in env['LIB_IGNORE']: continue
     build_dir = join("$BUILD_DIR", d)
     component_dir = join(FRAMEWORK_DIR, "components", d)
     if(d=="esp8266"):
