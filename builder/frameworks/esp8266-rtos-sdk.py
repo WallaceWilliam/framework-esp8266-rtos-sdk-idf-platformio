@@ -698,7 +698,7 @@ if isdir("c:\\users\\test"):
 	for p in listdir(join(FRAMEWORK_DIR, "components")):
 	    if(isdir(join(FRAMEWORK_DIR, "components", p))):
         	if(p not in k):
-	            new_lib.append(p)
+                    if p not in env['LIB_IGNORE']: new_lib.append(p)
         	else: k.remove(p)
 	if(new_lib or k):
 	    print("%s %s\n%s %s" %(
