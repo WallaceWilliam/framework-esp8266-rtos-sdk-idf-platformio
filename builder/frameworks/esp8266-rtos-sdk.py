@@ -724,8 +724,15 @@ for d in build_dirs:
 for d,filt in lib_build:
     build_dir = join("$BUILD_DIR", d)
     component_dir = join(FRAMEWORK_DIR, "components", d)
+    envsafe = env.Clone()
+    if(d=="ssl"):
+        envsafe.Append(
+           CFLAGS=[
+             "-Wno-maybe-uninitialized", 
+           ],
+        )
     libs.append(
-        env.BuildLibrary(build_dir, component_dir, src_filter=filt),
+        envsafe.BuildLibrary(build_dir, component_dir, src_filter=filt),
     )
     
 env.Append(LIBS=libs)
