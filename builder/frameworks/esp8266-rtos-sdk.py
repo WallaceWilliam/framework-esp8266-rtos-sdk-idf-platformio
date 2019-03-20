@@ -629,7 +629,7 @@ else:
 partitions_csv = env.BoardConfig().get("build.partitions", partitions_csv)
 full_partitions_csv=search_file(partitions_csv, search_path)
 env.Replace(
-    PARTITIONS_TABLE_CSV=full_partitions_csv if isfile(full_partitions_csv) else abspath(partitions_csv))
+    PARTITIONS_TABLE_CSV=full_partitions_csv if full_partitions_csv and isfile(full_partitions_csv) else abspath(partitions_csv))
 
 partition_table = env.Command(
     join("$BUILD_DIR", "partitions.bin"),
