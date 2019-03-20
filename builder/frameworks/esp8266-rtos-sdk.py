@@ -397,7 +397,7 @@ def build_espidf_bootloader():
     envsafe.Replace(
         LIBS=libs,
         MAP=[
-            "-Wl,-Map=$BUILD_DIR\\bootloader.map",
+            "-Wl,-Map=\"$BUILD_DIR/bootloader.map\"",
         ],
         COMPONENT_PATH=[
             join(FRAMEWORK_DIR, "components", "bootloader", "subproject", "main"),
