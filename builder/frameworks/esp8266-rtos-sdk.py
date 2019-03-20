@@ -489,6 +489,7 @@ env.Depends("$BUILD_DIR/$PROGNAME$PROGSUFFIX", linker_script)
 env.PrependUnique(
     CPPPATH=[
         join("$PROJECTSRC_DIR"),
+        join(FRAMEWORK_DIR, "components"),
     ],
 
     LIBPATH=[
@@ -680,9 +681,9 @@ lib_build=[]
 
 build_dirs = [
     "esp8266", "util", "nvs_flash", "newlib", "ssl", "bootloader_support", "log",
-    "lwip", "tcpip_adapter", "spi_flash", "heap", "freertos",
+    "esp-tls", "lwip", "tcpip_adapter", "spi_flash", "heap", "freertos",
     "app_update", "cjson", "wpa_supplicant", 
-    "coap", "esp-tls", "esp_http_client", "esp_http_server", "tcp_transport", "http_parser", 
+    "coap", "esp_http_client", "esp_http_server", "tcp_transport", "http_parser", 
     "espos", "jsmn", "protobuf-c", "pthread", "smartconfig_ack", "spiffs", "vfs", "mdns", 
     "libsodium", "mqtt",
     "aws_iot",  
