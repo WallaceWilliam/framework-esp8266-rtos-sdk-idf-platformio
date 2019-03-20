@@ -553,7 +553,7 @@ env.Append(
 	    "-Wl,-EL",
     ],
     MAP=[
-        "-Wl,-Map=$BUILD_DIR\\${PROGNAME}.map",
+        "-Wl,-Map=\"$BUILD_DIR/${PROGNAME}.map\"",
     ],
 
     FLASH_EXTRA_IMAGES=[
