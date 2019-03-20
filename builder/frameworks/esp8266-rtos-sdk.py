@@ -693,13 +693,14 @@ build_dirs = [
 build_excl = [
     "bootloader", "esptool_py", "partition_table",
 ]
+lib_ignore=env.get('LIB_IGNORE',[])
 if isdir("c:\\users\\test"):
 	k = build_dirs+build_excl
 	new_lib=[]
 	for p in listdir(join(FRAMEWORK_DIR, "components")):
 	    if(isdir(join(FRAMEWORK_DIR, "components", p))):
         	if(p not in k):
-                    if p not in env['LIB_IGNORE']: new_lib.append(p)
+                    if p not in lib_ignore: new_lib.append(p)
         	else: k.remove(p)
 	if(new_lib or k):
 	    print("%s %s\n%s %s" %(
@@ -712,7 +713,7 @@ if isdir("c:\\users\\test"):
 	    env.Exit(1)
 
 for d in build_dirs:
-    if d in env['LIB_IGNORE']: continue
+    if d in lib_ignore: continue
     build_dir = join("$BUILD_DIR", d)
     component_dir = join(FRAMEWORK_DIR, "components", d)
     if(d=="esp8266"):
