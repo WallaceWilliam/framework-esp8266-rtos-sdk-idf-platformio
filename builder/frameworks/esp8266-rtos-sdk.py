@@ -128,18 +128,18 @@ def parse_args(ln):
             else: arg=None
             continue
         if(arg is not None):
-            args[arg]=args[arg]+c
+            args[arg]=(args[arg]+c).strip()
     return args
 
 def check_ifeq(**kwargs):
     ret = False
     token = kwargs['token']
-    ln = token[1]
+    ln = " ".join(x for x in token[1:])
     args = parse_args(ln)
     if('arg1' in args):
-        arg_sfdconfig=env['SDKCONFIG'].get(args['arg1'], None)
-        arg_result=kwargs['result'].get(args['arg1'], None)
-        if(args['arg2']==arg_sfdconfig or args['arg2'] in arg_result):
+        arg_sdkconfig=env['SDKCONFIG'].get(args['arg1'], None)
+        arg_result=kwargs['result'].get(args['arg1'], [])
+        if(args['arg2']==arg_sdkconfig or args['arg2'] in arg_result):
             ret=True
     return ret
 
@@ -206,6 +206,8 @@ def parse_mk(path, **kwargs):
                     variable = variable[:-1]
                 variable = variable.strip()
                 line = line.strip()
+                if variable not in result or not add:
+                    result[variable] = []
             if not variable or not line:
                 continue
             multi = line.endswith('\\')
@@ -216,8 +218,6 @@ def parse_mk(path, **kwargs):
             line = line.replace("-L ", "-L")
             line = line.replace("'\"", "\\\"")
             line = line.replace("\"'", "\\\"")
-            if variable not in result or not add:
-                result[variable] = []
             result[variable].extend([l.strip() for l in line.split()])
             if not multi:
                 variable = None
@@ -456,6 +456,7 @@ sdkconfig=parse_define(join(env.subst("$PROJECTSRC_DIR"), "sdkconfig.h"))
 env.Replace(
      SDKCONFIG=sdkconfig,
 )
+
 #
 # Generate linker script
 #
@@ -684,7 +685,7 @@ build_dirs = [
     "esp-tls", "lwip", "tcpip_adapter", "spi_flash", "heap", "freertos",
     "app_update", "cjson", "wpa_supplicant", 
     "coap", "esp_http_client", "esp_http_server", "tcp_transport", "http_parser", 
-    "espos", "jsmn", "protobuf-c", "pthread", "smartconfig_ack", "spiffs", "vfs", "mdns", 
+    "jsmn", "protobuf-c", "pthread", "smartconfig_ack", "spiffs", "vfs", "mdns", 
     "libsodium", "mqtt",
     "aws_iot",  
     "esp_https_ota", "protocomm", "wifi_provisioning",
