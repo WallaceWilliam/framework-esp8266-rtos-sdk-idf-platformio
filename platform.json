@@ -14,6 +14,7 @@
   },
   "version": "1.0.0",
   "packageRepositories": [
+    "https://github.com/WallaceWilliam/curl_for_win/raw/master/manifest.json",
     {
       "toolchain-xtensa-lx106-elf-520": [
         {
@@ -38,6 +39,11 @@
       "type": "framework",
       "optional": true,
       "version": "https://github.com/espressif/ESP8266_RTOS_SDK.git"
+    },
+    "tool-curl-for-win": {
+      "type": "uploader",
+      "optional": true,
+      "version": ">1.0.0"
     }
   }
 }

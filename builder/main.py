@@ -331,6 +331,10 @@ if upload_protocol == "esptool":
         env.VerboseAction("$UPLOADCMD", "Uploading $SOURCE")
     ]
 
+elif upload_protocol == "httptool":
+    print(platform.packages)
+    uploader_dir = platform.get_package_dir("tool-curl-for-win") or ""
+    print("HTTP", uploader_dir)
 elif upload_protocol in debug_tools:
     openocd_dir = platform.get_package_dir("tool-openocd-esp32") or ""
     uploader_flags = ["-s", _to_unix_slashes(openocd_dir)]
