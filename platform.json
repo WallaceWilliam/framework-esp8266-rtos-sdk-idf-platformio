@@ -15,14 +15,7 @@
   "version": "1.0.0",
   "packageRepositories": [
     "https://github.com/WallaceWilliam/curl_for_win/raw/master/manifest.json",
-    {
-      "toolchain-xtensa-lx106-elf-520": [
-        {
-          "url": "https://github.com/WallaceWilliam/xtensa-lx106-elf-win32-1.22.0-92-g8facf4c-5.2.0/raw/master/xtensa-lx106-elf-win32-1.22.0-92-g8facf4c-5.2.0.tar.gz",
-          "version": "5.2.0"
-        }
-      ]
-    }
+    "https://github.com/WallaceWilliam/xtensa-lx106-elf/raw/master/manifest.json"
   ],
   "frameworks": {
     "esp8266-rtos-sdk": {
@@ -31,9 +24,9 @@
     }
   },
   "packages": {
-    "toolchain-xtensa-lx106-elf-520": {
+    "toolchain-xtensa-lx106-elf": {
       "type": "toolchain",
-      "version": ">5.0.0"
+      "version": "~5.2.0"
     },
     "framework-esp8266-rtos-sdk": {
       "type": "framework",
