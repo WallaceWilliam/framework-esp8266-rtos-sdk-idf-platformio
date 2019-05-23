@@ -75,7 +75,10 @@ def parse_var(ln, **kwargs):
                     state=k
                     break
             if(state is None):
-                raise ValueError("parse_var err", ln, c, p, node)
+                print(click.style("Error parse var", fg="red"))
+                print(ln, c, p, node)
+                return ln
+#                raise ValueError("parse_var err", ln, c, p, node)
             end=state.get('end',0)
             node=state['node_next']
             if(end):
@@ -651,32 +654,6 @@ env.Depends("$BUILD_DIR/$PROGNAME$PROGSUFFIX", env.ElfToBin(
 # Target: Build Core Library
 #
 
-def libnewlib():
-    filt=""
-    if('CONFIG_NEWLIB_ENABLE' in env['SDKCONFIG']):
-        ADD_NEW_NEWLIB = 0
-        if('CONFIG_NEWLIB_LIBRARY_LEVEL_NORMAL' in env['SDKCONFIG']):
-            LIBC = "c"
-            LIBM = "m"
-            ADD_NEW_NEWLIB = 1
-        elif('CONFIG_NEWLIB_LIBRARY_LEVEL_NANO' in env['SDKCONFIG']):
-            LIBC = "c_nano"
-            LIBM = "m"
-            ADD_NEW_NEWLIB = 1
-        if(ADD_NEW_NEWLIB == 1):
-            libs.append([LIBC, LIBM])
-            env.Append(
-                CPPPATH=[
-                    join(FRAMEWORK_DIR, "components", "newlib", "newlib", "port", "include"),
-                    join(FRAMEWORK_DIR, "components", "newlib", "include"),
-                ],
-                LIBPATH=[
-                    join(FRAMEWORK_DIR, "components", "newlib", "newlib", "lib"),
-                ],
-            )
-            filt="+<newlib/port/*> -<test*>"
-    return filt
-
 libs = []
 lib_build=[]
 
@@ -691,6 +668,7 @@ build_dirs = [
     "esp_https_ota", "protocomm", "wifi_provisioning",
     "esp_https_server", "esp_ringbuf", "console", "spi_ram",
 ]
+
 build_excl = [
     "bootloader", "esptool_py", "partition_table",
 ]

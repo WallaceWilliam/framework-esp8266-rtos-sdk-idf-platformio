@@ -19,6 +19,8 @@ from os.path import isfile, join
 from SCons.Script import (COMMAND_LINE_TARGETS, AlwaysBuild, Builder, Default,
                           DefaultEnvironment)
 
+import click
+
 #
 # Helpers
 #
@@ -117,6 +119,26 @@ def fetch_spiffs_size(env):
     env["SPIFFS_SIZE"] = _parse_size(spiffs['size'])
     env["SPIFFS_PAGE"] = int("0x100", 16)
     env["SPIFFS_BLOCK"] = int("0x1000", 16)
+
+#
+# OTA DATA helpers
+#
+
+def fetch_ota_data(env):
+    otadata = None
+    for p in _parse_partitions(env):
+        if p['type'] == "data" and p['subtype'] == "ota":
+            otadata = p
+    if not otadata:
+        sys.stderr.write(
+            env.subst("Could not find the `OTADATA section in the partitions "
+                      "table $PARTITIONS_TABLE_CSV\n"))
+        env.Exit(1)
+        return
+    env["OTADATA_XSTART"] = hex(_parse_size(otadata['offset']))
+    env["OTADATA_XSIZE"] = hex(_parse_size(otadata['size']))
+#    env["OTADATA_XSTART"] = otadata['offset']
+#    env["OTADATA_XSIZE"] = otadata['size']
 
 def __fetch_spiffs_size(target, source, env):
     fetch_spiffs_size(env)
@@ -324,17 +346,47 @@ if upload_protocol == "esptool":
             pass
     if ota_port:
         env.Replace(UPLOADCMD="$UPLOADOTACMD")
-
     upload_actions = [
-        env.VerboseAction(env.AutodetectUploadPort,
-                          "Looking for upload port..."),
-        env.VerboseAction("$UPLOADCMD", "Uploading $SOURCE")
+        env.VerboseAction(env.AutodetectUploadPort, click.style("Looking for upload port...",fg="green")),
+        env.VerboseAction("$UPLOADCMD", click.style("Uploading $SOURCE", fg="green")),
     ]
+    if 'CONFIG_PARTITION_TABLE_TWO_OTA' in env['SDKCONFIG']:
+        fetch_ota_data(env)
+        env.Append(ERASEFLAGS=[
+            "--baud", "$UPLOAD_SPEED",
+            "--after", "no_reset",
+            "erase_region",
+            "$OTADATA_XSTART", "$OTADATA_XSIZE",
+           ],
+        )
+        upload_actions.insert(1, env.VerboseAction('"$PYTHONEXE" "$ESPTOOL" $ERASEFLAGS', click.style("Erase OTA DATA $OTADATA_XSTART $OTADATA_XSIZE", fg="green")))
 
 elif upload_protocol == "httptool":
     print(platform.packages)
     uploader_dir = platform.get_package_dir("tool-curl-for-win") or ""
     print("HTTP", uploader_dir)
+    uploader_url = env['SDKCONFIG']["CUSTOM_UPLOAD_HOST"]+env['SDKCONFIG']["CUSTOM_UPLOAD_URL"]+"?"+env['SDKCONFIG'].get("CUSTOM_UPLOAD_PARAM","")
+
+    env.Replace(
+        CUSTOM_UPLOAD_USER=env['SDKCONFIG']["CUSTOM_UPLOAD_USER"],
+        CUSTOM_UPLOAD_PASS=env['SDKCONFIG']["CUSTOM_UPLOAD_PASS"],
+        CUSTOM_UPLOAD_URL=uploader_url,
+        CURL=join(uploader_dir, "bin", "curl.exe"),
+        UPLOADER="$CURL",
+        UPLOADERFLAGS=[
+            "--digest",
+            "-u", "$CUSTOM_UPLOAD_USER:$CUSTOM_UPLOAD_PASS",
+            "--data-binary",
+            '@"$PROJECT_DIR\\$SOURCE"',
+            "$CUSTOM_UPLOAD_URL",
+            "-k",
+        ],
+        UPLOADCMD='"$UPLOADER" $UPLOADERFLAGS',
+    )
+    upload_actions = [
+        env.VerboseAction("$UPLOADCMD", click.style("$UPLOADCMD Uploading $SOURCE $UPLOAD_URL", fg="green")),
+    ]
+#    print(env.Dump())
 elif upload_protocol in debug_tools:
     openocd_dir = platform.get_package_dir("tool-openocd-esp32") or ""
     uploader_flags = ["-s", _to_unix_slashes(openocd_dir)]

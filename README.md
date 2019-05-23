@@ -11,7 +11,7 @@ board = ...
 
 Package include
 - builder scrypt for framework https://github.com/espressif/ESP8266_RTOS_SDK.git master
-- toolchain [Windows](https://dl.espressif.com/dl/xtensa-lx106-elf-win32-1.22.0-92-g8facf4c-5.2.0.tar.gz)
+- toolchain [Windows and OSX](https://dl.espressif.com/dl/xtensa-lx106-elf-1.22.0-92-g8facf4c-5.2.0)
 
 builder scrypt test only
 - board 4M
