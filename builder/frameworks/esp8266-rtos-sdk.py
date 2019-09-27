@@ -666,13 +666,14 @@ build_dirs = [
     "libsodium", "mqtt",
     "aws_iot",  
     "esp_https_ota", "protocomm", "wifi_provisioning",
-    "esp_https_server", "esp_ringbuf", "console", "spi_ram",
+    "esp_https_server", "esp_ringbuf", "console", "spi_ram", "esp_common",
 ]
 
 build_excl = [
     "bootloader", "esptool_py", "partition_table",
 ]
-lib_ignore=env.get('LIB_IGNORE',[])
+lib_ignore=env.GetProjectOption("lib_ignore", [])
+
 if isdir("c:\\users\\test"):
 	k = build_dirs+build_excl
 	new_lib=[]

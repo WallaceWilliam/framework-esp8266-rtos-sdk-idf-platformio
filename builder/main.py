@@ -292,6 +292,9 @@ AlwaysBuild(target_size)
 upload_protocol = env.subst("$UPLOAD_PROTOCOL")
 debug_tools = env.BoardConfig().get("debug.tools", {})
 upload_actions = []
+env.Replace(
+        TARGET_FIRM=target_firm,
+)
 
 if upload_protocol == "esptool":
     env.Replace(
@@ -361,32 +364,6 @@ if upload_protocol == "esptool":
         )
         upload_actions.insert(1, env.VerboseAction('"$PYTHONEXE" "$ESPTOOL" $ERASEFLAGS', click.style("Erase OTA DATA $OTADATA_XSTART $OTADATA_XSIZE", fg="green")))
 
-elif upload_protocol == "httptool":
-    print(platform.packages)
-    uploader_dir = platform.get_package_dir("tool-curl-for-win") or ""
-    print("HTTP", uploader_dir)
-    uploader_url = env['SDKCONFIG']["CUSTOM_UPLOAD_HOST"]+env['SDKCONFIG']["CUSTOM_UPLOAD_URL"]+"?"+env['SDKCONFIG'].get("CUSTOM_UPLOAD_PARAM","")
-
-    env.Replace(
-        CUSTOM_UPLOAD_USER=env['SDKCONFIG']["CUSTOM_UPLOAD_USER"],
-        CUSTOM_UPLOAD_PASS=env['SDKCONFIG']["CUSTOM_UPLOAD_PASS"],
-        CUSTOM_UPLOAD_URL=uploader_url,
-        CURL=join(uploader_dir, "bin", "curl.exe"),
-        UPLOADER="$CURL",
-        UPLOADERFLAGS=[
-            "--digest",
-            "-u", "$CUSTOM_UPLOAD_USER:$CUSTOM_UPLOAD_PASS",
-            "--data-binary",
-            '@"$PROJECT_DIR\\$SOURCE"',
-            "$CUSTOM_UPLOAD_URL",
-            "-k",
-        ],
-        UPLOADCMD='"$UPLOADER" $UPLOADERFLAGS',
-    )
-    upload_actions = [
-        env.VerboseAction("$UPLOADCMD", click.style("$UPLOADCMD Uploading $SOURCE $UPLOAD_URL", fg="green")),
-    ]
-#    print(env.Dump())
 elif upload_protocol in debug_tools:
     openocd_dir = platform.get_package_dir("tool-openocd-esp32") or ""
     uploader_flags = ["-s", _to_unix_slashes(openocd_dir)]
@@ -411,12 +388,12 @@ elif upload_protocol in debug_tools:
 
 # custom upload tool
 elif upload_protocol == "custom":
-    upload_actions = [env.VerboseAction("$UPLOADCMD", "Uploading $SOURCE")]
+    upload_actions = [env.VerboseAction("$UPLOADCMD", click.style("$UPLOADCMD Uploading $SOURCE", fg="green"))]
 
 else:
     sys.stderr.write("Warning! Unknown upload protocol %s\n" % upload_protocol)
 
-AlwaysBuild(env.Alias(["upload", "uploadfs"], target_firm, upload_actions))
+AlwaysBuild(env.Alias(["upload", "uploadfs"], "$TARGET_FIRM", upload_actions))
 
 #
 # Target: Erase Flash
