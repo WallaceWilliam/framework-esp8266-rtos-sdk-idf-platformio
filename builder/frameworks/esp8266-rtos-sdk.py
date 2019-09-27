@@ -660,7 +660,7 @@ lib_build=[]
 build_dirs = [
     "esp8266", "util", "nvs_flash", "newlib", "ssl", "bootloader_support", "log",
     "esp-tls", "lwip", "tcpip_adapter", "spi_flash", "heap", "freertos",
-    "app_update", "cjson", "wpa_supplicant", 
+    "app_update", "json", "wpa_supplicant", 
     "coap", "esp_http_client", "esp_http_server", "tcp_transport", "http_parser", 
     "jsmn", "protobuf-c", "pthread", "smartconfig_ack", "spiffs", "vfs", "mdns", 
     "libsodium", "mqtt",
