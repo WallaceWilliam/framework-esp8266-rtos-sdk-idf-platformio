@@ -666,9 +666,9 @@ build_dirs = [
     "libsodium", "mqtt",
     "aws_iot",  
     "esp_https_ota", "protocomm", "wifi_provisioning",
-    "esp_https_server", "esp_ringbuf", "console", "spi_ram", "esp_common",
+    "esp_ringbuf", "console", "spi_ram", "mbedtls",
 ]
-
+#"esp_https_server", "esp_common",
 build_excl = [
     "bootloader", "esptool_py", "partition_table",
 ]
