@@ -658,7 +658,7 @@ libs = []
 lib_build=[]
 
 build_dirs = [
-    "esp8266", "util", "nvs_flash", "newlib", "ssl", "bootloader_support", "log",
+    "esp8266", "util", "nvs_flash", "newlib", "openssl", "bootloader_support", "log",
     "esp-tls", "lwip", "tcpip_adapter", "spi_flash", "heap", "freertos",
     "app_update", "json", "wpa_supplicant", 
     "coap", "esp_http_client", "esp_http_server", "tcp_transport", "http_parser", 
@@ -666,9 +666,9 @@ build_dirs = [
     "libsodium", "mqtt",
     "aws_iot",  
     "esp_https_ota", "protocomm", "wifi_provisioning",
-    "esp_ringbuf", "console", "spi_ram", "mbedtls",
+    "esp_ringbuf", "console", "spi_ram", "mbedtls", "esp_common", 
 ]
-#"esp_https_server", "esp_common",
+#"esp_https_server", 
 build_excl = [
     "bootloader", "esptool_py", "partition_table",
 ]
