@@ -1,5 +1,6 @@
 # framework-esp8266-rtos-sdk-idf-platformio
 There are several ways to compile a project if windows
+VSCODE 
 
 # 1 compile with idf.py
 
@@ -30,6 +31,10 @@ register_component()
 1.8 from vscode terminal run %IDF_PATH%/tools/idf.py build (or flash)
 
 to get more documentation on idf.py run idf.py without parameters
+
+to configure project use create file sdkconfig.defaults in project root
+
+
 
 # 2 compile with cmake
 
