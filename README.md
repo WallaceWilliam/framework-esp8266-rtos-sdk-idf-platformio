@@ -38,4 +38,6 @@ to configure project use create file sdkconfig.defaults in project root
 
 # 2 compile with cmake
 
+https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/build-system.html#using-cmake-directly
+
 # 3 compile with make
