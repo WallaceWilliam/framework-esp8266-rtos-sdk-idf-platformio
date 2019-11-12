@@ -29,6 +29,8 @@ import sys
 from SCons.Script import DefaultEnvironment
 import shlex
 import click
+print(click.style("To compile project see README.md", fg="red"))
+exit(1)
 
 env = DefaultEnvironment()
 platform = env.PioPlatform()
@@ -121,7 +123,10 @@ def parse_args(ln):
                     state=k
                     break
             if(state is None):
-                raise ValueError("ifeq err", ln, c, p)
+                print(click.style("Error parse var", fg="red"))
+                print(ln, c, p, node)
+                return ln
+#                raise ValueError("ifeq err", ln, c, p)
             end=state.get('end',0)
             if(end): break
             node=state['node_next']

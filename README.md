@@ -1,30 +1,35 @@
 # framework-esp8266-rtos-sdk-idf-platformio
-This is PLATFORM package for platformio.
+There are several ways to compile a project if windows
 
-```ini
-[env:stable]
-platform = custom8266
-framework = esp8266-rtos-sdk
-board = ...
-...
+# 1 compile with idf.py
+
+1.1 Add Environment variable IDF_PATH={path to FRAMEWORK_DIR}
+
+1.2 install [CMAKE for Windows](https://cmake.org/download/), [NINJA](https://github.com/ninja-build/ninja/releases), [MCONF](https://github.com/espressif/kconfig-frontends/releases/)
+
+1.3 add path to cmake/bin, mconf, ninja to PATH
+
+1.4 install python requirements from requirements.txt
+
+1.5 Rename SRC Dir to MAIN Dir
+
+1.6 Add to project root file CMakeLists.txt
+```
+cmake_minimum_required(VERSION 3.5)
+include($ENV{IDF_PATH}/tools/cmake/project.cmake)
+project({project-name})
 ```
 
-Package include
-- builder scrypt for framework https://github.com/espressif/ESP8266_RTOS_SDK.git master
-- toolchain [Windows and OSX](https://dl.espressif.com/dl/xtensa-lx106-elf-1.22.0-92-g8facf4c-5.2.0)
+1.7 add to MAIN dir file CMakeLists.txt
+```
+file(GLOB SOURCES "*.c")
+set(COMPONENT_SRCS "${SOURCES}")
+register_component()
+```
 
-builder scrypt test only
-- board 4M
-- CONFIG_PARTITION_TABLE_SINGLE_APP
-- flash over USB CP2102 (and similar)
+1.8 from vscode terminal run %IDF_PATH%/tools/idf.py build (or flash)
+to get more documentation on idf.py run idf.py without parameters
 
-features such as secureboot, OTA, flash less than 4M - NOT TESTED!!
+# 2 compile with cmake
 
-## UPD 08.03.2019
-Added support CONFIG_PARTITION_TABLE_CUSTOM_FILENAME
-
-in sdkconfig.h
-
-#define CONFIG_PARTITION_TABLE_CUSTOM_FILENAME "partitions_custom.csv"
-
-in $PROJECTSRC_DIR put partitions_custom.csv
+# 3 compile with make
