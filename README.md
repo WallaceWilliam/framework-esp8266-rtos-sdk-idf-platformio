@@ -4,7 +4,7 @@ VSCODE
 
 # 1 compile with idf.py
 
-1.1 Add Environment variable IDF_PATH={path to FRAMEWORK_DIR}
+1.1 Add Environment variable IDF_PATH={path to FRAMEWORK_DIR}. add {path to FRAMEWORK_DIR} to PATH
 
 1.2 install [CMAKE for Windows](https://cmake.org/download/), [NINJA](https://github.com/ninja-build/ninja/releases), [MCONF](https://github.com/espressif/kconfig-frontends/releases/)
 
