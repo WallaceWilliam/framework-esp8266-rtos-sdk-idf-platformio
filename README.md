@@ -1,5 +1,5 @@
 # framework-esp8266-rtos-sdk-idf-platformio
-There are several ways to compile a project if windows
+There are several ways to compile a project in windows
 VSCODE 
 
 # 1 compile with idf.py
