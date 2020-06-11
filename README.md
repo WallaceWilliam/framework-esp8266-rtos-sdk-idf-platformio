@@ -12,14 +12,23 @@ VSCODE
 
 1.4 install python requirements from requirements.txt
 
+python -m pip install -r %IDF_PATH%\requirements.txt
+
+be careful
+
+python3 required
+
 1.5 Rename SRC Dir to MAIN Dir
 
 1.6 Add to project root file CMakeLists.txt
+
 ```
 cmake_minimum_required(VERSION 3.5)
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 project({project-name})
 ```
+
+where {project-name} - the name of your project
 
 1.7 add to MAIN dir file CMakeLists.txt
 ```
@@ -34,7 +43,9 @@ to get more documentation on idf.py run idf.py without parameters
 
 to configure project use create file sdkconfig.defaults in project root
 
+be careful
 
+python3 required
 
 # 2 compile with cmake
 
