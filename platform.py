@@ -13,7 +13,7 @@
 # limitations under the License.
 
 from platformio.managers.platform import PlatformBase
-
+from platformio.util import get_systype
 
 class Custom8266Platform(PlatformBase):
 
@@ -22,5 +22,11 @@ class Custom8266Platform(PlatformBase):
             self.packages['sdk-esp8266']['optional'] = False
         if "buildfs" in targets:
             self.packages['tool-mkspiffs']['optional'] = False
+        if "esp8266-rtos-sdk" in variables.get("pioframework", []):
+            for p in self.packages:
+                if p in ("tool-cmake", "tool-ninja"):
+                    self.packages[p]["optional"] = False
+                elif p in ("tool-mconf") and "windows" in get_systype():
+                    self.packages[p]['optional'] = False
         return PlatformBase.configure_default_packages(
             self, variables, targets)
