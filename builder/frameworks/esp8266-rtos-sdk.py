@@ -163,15 +163,20 @@ def normalize_path(path):
 
 
 def create_default_project_files():
-    root_cmake_tpl = """cmake_minimum_required(VERSION 3.16.0)
+    root_cmake_tpl = """# This file was automatically generated for projects
+# without default 'CMakeLists.txt' file.
+cmake_minimum_required(VERSION 3.16.0)
+if($ENV{CMAKE_ADD_SRC})
+  message(STATUS "ADD SRC")
+  set(EXTRA_COMPONENT_DIRS src)
+endif($ENV{CMAKE_ADD_SRC})
+unset($ENV{CMAKE_ADD_SRC} CACHE)
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 project(%s)
 """
     prj_cmake_tpl = """# This file was automatically generated for projects
 # without default 'CMakeLists.txt' file.
-
 FILE(GLOB_RECURSE app_sources %s/*.*)
-
 idf_component_register(SRCS ${app_sources})
 """
 
@@ -230,12 +235,9 @@ def populate_idf_env_vars(idf_env):
     idf_env["IDF_PATH"] = env.subst("$FRAMEWORK_DIR") #platform.get_package_dir("framework-espidf")
 
     additional_packages = [
-#        join(platform.get_package_dir("toolchain-xtensa32"), "bin"),
-#        join(platform.get_package_dir("toolchain-esp32ulp"), "bin"),
         join(platform.get_package_dir("toolchain-xtensa-lx106-elf"), "bin"),
         platform.get_package_dir("tool-ninja"),
         join(platform.get_package_dir("tool-cmake"), "bin"),
-#        dirname(where_is_program("python")),
     ]
 
     if "windows" in get_systype():
@@ -816,11 +818,43 @@ def define_partition_size():
        ENV_APP_SIZE=app_size,
     )
 
+###
+# add sdkconfig to env
 def parse_conf():
     sdkconfig=parse_define(join(env.subst("$PROJECT_DIR"), "sdkconfig"))
     env.Replace(
        SDKCONFIG=sdkconfig,
     )
+
+###
+# create scripf for build app from cmd with idf.py
+def build_sc_idf():
+
+    if "windows" not in get_systype():
+        return
+    additional_packages = [
+        join(platform.get_package_dir("toolchain-xtensa-lx106-elf"), "bin"),
+        platform.get_package_dir("tool-ninja"),
+        join(platform.get_package_dir("tool-cmake"), "bin"),
+    ]
+    if "windows" in get_systype():
+        additional_packages.append(platform.get_package_dir("tool-mconf"))
+
+    payload = """@rem This file was automatically generated
+@set IDF_PATH={0}
+@set PATH={1};%PATH%
+@set CMAKE_ADD_SRC=1
+python %IDF_PATH%/tools/idf.py build
+@set CMAKE_ADD_SRC=
+""".format(env.subst("$FRAMEWORK_DIR"),";".join([l for l in additional_packages]))
+    project_dir = env.subst("$PROJECT_DIR")
+    build_wit_idf_file = join(project_dir, "idf.bat")
+    if not isfile(build_wit_idf_file):
+        with open(build_wit_idf_file, "w") as fp:
+            fp.write(payload)
+
+####
+build_sc_idf()
 
 #
 # Generate final linker script
