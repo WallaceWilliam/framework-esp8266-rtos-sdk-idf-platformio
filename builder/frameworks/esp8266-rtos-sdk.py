@@ -767,7 +767,8 @@ idf_component_register(SRCS ${component_sources})
 
 def find_default_component(target_configs):
     for config in target_configs:
-        if "__pio_env" in config:
+#        if "__pio_env" in config:
+        if "__idf___pio_env" == config:
             return config
     return ""
 
@@ -811,8 +812,10 @@ def partition_table_get_partition_info(get_part_info_args, part_info):
     return result["out"]
 
 def define_partition_size():
-    app_offset = partition_table_get_partition_info("--partition-boot-default", "offset")
-    app_size = partition_table_get_partition_info("--partition-boot-default", "size")
+    z = partition_table_get_partition_info("--partition-boot-default", "offset")
+    app_offset = hex(int(z,16))
+    z = partition_table_get_partition_info("--partition-boot-default", "size")
+    app_size = hex(int(z,16))
     env.Replace(
        ENV_APP_OFFSET=app_offset,
        ENV_APP_SIZE=app_size,
