@@ -1104,7 +1104,7 @@ env.Prepend(
     LINKFLAGS=extra_flags,
     LIBS=libs,
     FLASH_EXTRA_IMAGES=[
-        ("0x1000", join("$BUILD_DIR", "bootloader.bin")),
+        ("0x0000", join("$BUILD_DIR", "bootloader.bin")),
         ("0x8000", join("$BUILD_DIR", "partitions.bin")),
     ],
 )
