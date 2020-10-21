@@ -27,7 +27,7 @@
   "packages": {
     "toolchain-xtensa-lx106-elf": {
       "type": "toolchain",
-      "version": "5.2.0+100"
+      "version": "8_4_0-esp-2020r3"
     },
     "framework-esp8266-rtos-sdk": {
       "type": "framework",
