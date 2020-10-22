@@ -6,7 +6,7 @@
   "homepage": "http://platformio.org/platforms/espressif8266",
   "license": "Apache-2.0",
   "engines": {
-    "platformio": "^3.0.0"
+    "platformio": "^5"
   },
   "repository": {
     "type": "git",
@@ -14,9 +14,10 @@
   },
   "version": "1.1.0",
   "packageRepositories": [
+    "https://dl.bintray.com/platformio/dl-packages/manifest.json", 
+    "http://dl.platformio.org/packages/manifest.json",
     "https://github.com/WallaceWilliam/curl_for_win/raw/master/manifest.json",
-    "https://github.com/WallaceWilliam/xtensa-lx106-elf/raw/master/manifest.json",
-    "https://dl.bintray.com/platformio/dl-packages/manifest.json"
+    "https://github.com/WallaceWilliam/xtensa-lx106-elf/raw/master/manifest.json"
   ],
   "frameworks": {
     "esp8266-rtos-sdk": {
@@ -27,7 +28,7 @@
   "packages": {
     "toolchain-xtensa-lx106-elf": {
       "type": "toolchain",
-      "version": "8_4_0_2020_3"
+      "version": "8.4.0+esp2020r3"
     },
     "framework-esp8266-rtos-sdk": {
       "type": "framework",
